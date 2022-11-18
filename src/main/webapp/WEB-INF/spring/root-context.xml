@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <!-- Root Context: defines shared resources visible to all other web components -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+        <property name="jdbcUrl"
+                  value="jdbc:log4jdbc:mysql://localhost:3306/noc?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Asia/Seoul"/>
+        <property name="username" value="nocturnum"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <!-- HikariCP configuration -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/**/*Mapper.xml"/>
+    </bean>
+
+    <!--    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
+              destroy-method="clearCache">
+            <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+        </bean>-->
+
+
+    <mybatis:scan base-package="org.nocturnum.mapper, org.nocturnum.sample.mapper"/>
+    <!--    <context:component-scan base-package="org.nocturnum.domain"/>-->
+    <context:component-scan base-package="org.nocturnum">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <context:annotation-config/>
+
+</beans>

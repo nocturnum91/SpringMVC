@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nocturnum.blog.mapper.BlogMapper">
+    <sql id="criteria">
+        <if test="cri.keyword != null">
+            and (title like concat('%',#{cri.keyword},'%') or content like concat('%',#{cri.keyword},'%'))
+        </if>
+    </sql>
+
+    <insert id="insert">
+        insert into tb_blog (bno, title, content)
+        values (0, #{title}, #{content})
+    </insert>
+
+    <insert id="insertSelectKey">
+        insert into tb_blog (bno, title, content) values (#{bno}, #{title}, #{content})
+        <selectKey keyProperty="bno" order="AFTER" resultType="long">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <select id="read" resultType="BlogVO">
+        select bno, title, content, regdate, updatedate
+        from tb_blog
+        where bno = #{bno}
+    </select>
+
+    <select id="getList" resultType="BlogVO">
+        select bno, title, content, regdate, updatedate
+        from tb_blog
+        where bno > 0
+    </select>
+
+    <!-- limit: 조회 개수, offset: 조회 시작 위치값  -->
+    <select id="getListWithPaging" resultType="BlogVO">
+        select tmp.bno, title, content, regdate, updatedate
+        from tb_blog as b
+        join (select bno
+        from tb_blog
+        where 1=1
+        <include refid="criteria"/>
+        order by bno desc limit #{cri.amount}
+        offset #{cri.skipCount}) as tmp
+        on tmp.bno = b.bno
+    </select>
+
+    <update id="update">
+        update tb_blog
+        set title      = #{title},
+            content    = #{content},
+            updateDate = now()
+        where bno = #{bno}
+    </update>
+
+    <delete id="delete">
+        delete
+        from tb_blog
+        where bno = #{bno}
+    </delete>
+
+    <select id="checkBno" resultType="Long">
+        select max(bno) bno
+        from tb_blog tb
+    </select>
+
+    <select id="getPreBno" resultType="Long">
+        select bno
+        from tb_blog
+        where bno <![CDATA[ < ]]> #{bno}
+        <include refid="criteria"/>
+        order by bno desc limit 1
+    </select>
+
+    <select id="getNextBno" resultType="Long">
+        select bno
+        from tb_blog
+        where bno <![CDATA[ > ]]> #{bno}
+        <include refid="criteria"/>
+        order by bno asc limit 1
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        select count(*)
+        from tb_blog
+        where bno > 0
+    </select>
+
+</mapper>

@@ -43,15 +43,18 @@
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const modifyForm = document.getElementById("modifyForm")
-        console.log(modifyForm)
         const buttons = document.querySelectorAll(".main-wrapper button[type='submit']")
-        console.log(buttons)
+        const hiddenInputs = modifyForm.querySelectorAll("[type='hidden']")
+
 
         buttons.forEach((button) => {
             button.addEventListener("click", function (e) {
                 e.preventDefault()
                 const operation = button.dataset.oper
                 if (operation === "modify") {
+                    if (modifyForm.querySelector("input[name='keyword']") !== undefined && modifyForm.querySelector("input[name='keyword']").value === "") {
+                        modifyForm.querySelector("input[name='keyword']").remove()
+                    }
                     modifyForm.submit()
                 } else if (operation === "cancel") {
                     history.back()

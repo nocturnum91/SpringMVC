@@ -96,11 +96,7 @@ public class BlogController {
             rttr.addFlashAttribute("result", "success");
         }
 
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
-        rttr.addAttribute("keyword", cri.getKeyword());
-
-        return "redirect:/blog/home";
+        return "redirect:/blog/home" + cri.getListLink(cri);
     }
 
     @PostMapping("/remove")
@@ -115,11 +111,7 @@ public class BlogController {
             rttr.addFlashAttribute("result", "success");
         }
 
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
-        rttr.addAttribute("keyword", cri.getKeyword());
-
-        return "redirect:/blog/home";
+        return "redirect:/blog/home" + cri.getListLink(cri);
     }
 
 

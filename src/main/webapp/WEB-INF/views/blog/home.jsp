@@ -24,26 +24,25 @@
 
     <section class="blog-list px-3 py-5 p-md-5">
         <div class="container single-col-max-width">
-
-            <div class="item mb-5">
-                <div class="row g-3 g-xl-0">
-                    <div class="col-2 col-xl-3">
-                        <img class="img-fluid post-thumb " src="../resources/assets/images/blog/blog-post-thumb-1.jpg"
-                             alt="image">
-                    </div>
-                    <div class="col">
-                        <h3 class="title mb-1"><a class="text-link" href="blog-post.html">Top 3 JavaScript
-                            Frameworks</a></h3>
-                        <div class="meta mb-1"><span class="date">Published 2 days ago</span><span class="time">5 min read</span><span
-                                class="comment"><a class="text-link" href="#">8 comments</a></span></div>
-                        <div class="intro">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                            ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient
-                            montes, nascetur ridiculus mus. Donec quam felis, ultricies...
-                        </div>
-                        <a class="text-link" href="blog-post.html">Read more &rarr;</a>
-                    </div><!--//col-->
-                </div><!--//row-->
-            </div><!--//item-->
+<%--            <div class="item mb-5">--%>
+<%--                <div class="row g-3 g-xl-0">--%>
+<%--                    <div class="col-2 col-xl-3">--%>
+<%--                        <img class="img-fluid post-thumb " src="../resources/assets/images/blog/blog-post-thumb-1.jpg"--%>
+<%--                             alt="image">--%>
+<%--                    </div>--%>
+<%--                    <div class="col">--%>
+<%--                        <h3 class="title mb-1"><a class="text-link" href="blog-post.html">Top 3 JavaScript--%>
+<%--                            Frameworks</a></h3>--%>
+<%--                        <div class="meta mb-1"><span class="date">Published 2 days ago</span><span class="time">5 min read</span><span--%>
+<%--                                class="comment"><a class="text-link" href="#">8 comments</a></span></div>--%>
+<%--                        <div class="intro">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo--%>
+<%--                            ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient--%>
+<%--                            montes, nascetur ridiculus mus. Donec quam felis, ultricies...--%>
+<%--                        </div>--%>
+<%--                        <a class="text-link" href="blog-post.html">Read more &rarr;</a>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             <c:forEach items="${list}" var="blog">
                 <div class="item mb-5">
                     <div class="row g-3 g-xl-0">

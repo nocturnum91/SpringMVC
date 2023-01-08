@@ -1,0 +1,31 @@
+### 댓글 추가
+POST http://localhost:8080/SpringMVC/replies/new
+Content-Type: application/json
+
+{
+  "bno": 2424819,
+  "reply": "content",
+  "replier": "Noc"
+}
+
+### 게시물별 댓글 리스트
+GET http://localhost:8080/SpringMVC/replies/pages/2424819/1
+Accept: application/json
+
+### 댓글 1건 조회
+GET http://localhost:8080/SpringMVC/replies/5
+Accept: application/json
+
+### 댓글 수정
+PUT http://localhost:8080/SpringMVC/replies/11
+Content-Type: application/json
+
+{
+  "bno": 2424819,
+  "reply": "111111111",
+  "replier": "Noc"
+}
+
+### 댓글 삭제
+DELETE http://localhost:8080/SpringMVC/replies/11
+Content-Type: application/json

@@ -1,0 +1,69 @@
+package org.nocturnum.blog.service;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import org.nocturnum.blog.domain.Criteria;
+import org.nocturnum.blog.domain.ReplyVO;
+import org.nocturnum.blog.mapper.ReplyMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+@Log4j
+public class ReplyServiceImpl implements ReplyService {
+
+    private ReplyMapper replyMapper;
+
+    @Override
+    public int register(ReplyVO reply) {
+        log.info("REGISTER..." + reply);
+        return replyMapper.insert(reply);
+    }
+
+    @Override
+    public ReplyVO get(Long rno) {
+        log.info("GET..." + rno);
+        return replyMapper.read(rno);
+    }
+
+    @Override
+    public List<ReplyVO> getList(Criteria cri, Long bno) {
+        log.info("GET REPLY LIST..." + cri);
+        return replyMapper.getListWithPaging(cri, bno);
+    }
+
+    @Override
+    public int modify(ReplyVO reply) {
+        log.info("MODIFY..." + reply);
+        return replyMapper.update(reply);
+    }
+
+    @Override
+    public int remove(Long rno) {
+        log.info("REMOVE..." + rno);
+        return replyMapper.delete(rno);
+    }
+
+//    @Override
+//    public Long checkrno() {
+//        return replyMapper.checkrno();
+//    }
+//
+//    @Override
+//    public int getTotal(Criteria cri) {
+//        return replyMapper.getTotalCount(cri);
+//    }
+//
+//    @Override
+//    public Long getPrerno(Criteria cri, Long rno) {
+//        return replyMapper.getPrerno(cri, rno);
+//    }
+//
+//    @Override
+//    public Long getNextrno(Criteria cri, Long rno) {
+//        return replyMapper.getNextrno(cri, rno);
+//    }
+
+}

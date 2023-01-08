@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nocturnum.blog.mapper.ReplyMapper">
+
+    <insert id="insert">
+        insert into tb_reply (rno, bno, reply, replier)
+        values (0, #{bno}, #{reply}, #{replier})
+        <selectKey keyProperty="rno" order="AFTER" resultType="long">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <select id="read" resultType="ReplyVO">
+        select rno, bno, reply, replier, replyDate, updateDate
+        from tb_reply
+        where rno = #{rno}
+    </select>
+
+    <select id="getListWithPaging" resultType="ReplyVO">
+        select rno, bno, reply, replier, replyDate, updateDate
+        from tb_reply
+        where bno = #{bno}
+        order by rno asc
+    </select>
+
+    <update id="update">
+        update tb_reply
+        set reply      = #{reply},
+            updateDate = now()
+        where rno = #{rno}
+    </update>
+
+    <delete id="delete">
+        delete
+        from tb_reply
+        where rno = #{rno}
+    </delete>
+
+</mapper>

@@ -27,7 +27,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/posting");
+        log.info("ipAddress: " + ipAddress + " /posting");
     }
 
     @PostMapping("/posting")
@@ -36,7 +36,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/posting " + blogVO);
+        log.info("ipAddress: " + ipAddress + " /posting " + blogVO);
         blogService.register(blogVO);
         rttr.addFlashAttribute("result", blogVO.getBno());
         return "redirect:/blog/home";
@@ -48,7 +48,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/post");
+        log.info("ipAddress: " + ipAddress + " /post");
 
         if (bno == null) {
             bno = blogService.checkBno();
@@ -66,7 +66,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/home" + cri);
+        log.info("ipAddress: " + ipAddress + " /home" + cri);
 //        model.addAttribute("list", blogService.getList());
 
         int total = blogService.getTotal(cri);
@@ -80,7 +80,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/modify " + bno);
+        log.info("ipAddress: " + ipAddress + " /modify " + bno);
         model.addAttribute("blog", blogService.get(bno));
     }
 
@@ -90,7 +90,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/modify " + blogVO);
+        log.info("ipAddress: " + ipAddress + " /modify " + blogVO);
         if (blogService.modify(blogVO)) {
             rttr.addFlashAttribute("method", "modify");
             rttr.addFlashAttribute("result", "success");
@@ -105,7 +105,7 @@ public class BlogController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        log.info("ipAddress: " + ipAddress + "/remove" + bno);
+        log.info("ipAddress: " + ipAddress + " /remove" + bno);
         if (blogService.remove(bno)) {
             rttr.addFlashAttribute("method", "remove");
             rttr.addFlashAttribute("result", "success");

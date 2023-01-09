@@ -128,10 +128,15 @@ a.no-text-decoration {
     height: 3px;
     border-radius: 50%;
     background: #8f8f8f;
-    margin-left: 0.3rem;
+    margin-left: 0.5rem;
     margin-right: 0.3rem;
     position: relative;
     top: -3px;
+}
+
+.meta span.replier{
+    color: #55595c;
+    font-size: 1rem;
 }
 
 img, svg {
@@ -254,4 +259,9 @@ img, svg {
     .main-wrapper {
         margin-left: 0
     }
+}
+
+.blog-comments-section li div.comment {
+    border-left: 5px solid #1a1a1a;
+    padding-left: 7px;
 }

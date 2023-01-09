@@ -36,51 +36,28 @@
 
                 <nav class="blog-nav nav nav-pills nav-justified my-5">
                     <a class="nav-link-prev nav-item nav-link rounded-left" data-oper="prev"
-                       href="<c:out value='${preBno}'/>">Previous<i
+                       data-bno="<c:out value='${preBno}'/>">Previous<i
                             class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
                     <a class="nav-link-next nav-item nav-link rounded-right" data-oper="next"
-                       href="<c:out value='${nextBno}'/>">Next<i
+                       data-bno="<c:out value='${nextBno}'/>">Next<i
                             class="arrow-next fas fa-long-arrow-alt-right"></i></a>
                 </nav>
 
-                <%--            <div class="blog-comments-section">--%>
-                <%--                <div id="disqus_thread"></div>--%>
-                <%--                <script>--%>
-                <%--                    /**--%>
-                <%--                     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT--%>
-                <%--                     * THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR--%>
-                <%--                     * PLATFORM OR CMS.--%>
-                <%--                     *--%>
-                <%--                     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:--%>
-                <%--                     * https://disqus.com/admin/universalcode/#configuration-variables--%>
-                <%--                     */--%>
-                <%--                    /*--%>
-                <%--                    var disqus_config = function () {--%>
-                <%--                    // Replace PAGE_URL with your page's canonical URL variable--%>
-                <%--                    this.page.url = PAGE_URL;--%>
 
-                <%--                    // Replace PAGE_IDENTIFIER with your page's unique identifier variable--%>
-                <%--                    this.page.identifier = PAGE_IDENTIFIER;--%>
-                <%--                    };--%>
-                <%--                    */--%>
-
-                <%--                    (function () { // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW--%>
-                <%--                        var d = document, s = d.createElement('script');--%>
-
-                <%--                        // IMPORTANT TODO: Replace 3wmthemes with your forum shortname!--%>
-                <%--                        s.src = 'https://3wmthemes.disqus.com/embed.js';--%>
-
-                <%--                        s.setAttribute('data-timestamp', +new Date());--%>
-                <%--                        (d.head || d.body).appendChild(s);--%>
-                <%--                    })();--%>
-                <%--                </script>--%>
-                <%--                <noscript>--%>
-                <%--                    Please enable JavaScript to view the--%>
-                <%--                    <a href="https://disqus.com/?ref_noscript" rel="nofollow">--%>
-                <%--                        comments powered by Disqus.--%>
-                <%--                    </a>--%>
-                <%--                </noscript>--%>
-                <%--            </div><!--//blog-comments-section-->--%>
+                <div class="blog-comments-section">
+                    <ul class="comment-list list-unstyled">
+                        <li>
+                            <div class="comment">
+                                <div class="meta">
+                                    <span class="replier">Noc</span>
+                                    <span class="date">2023-01-10 00:30</span>
+                                </div>
+                                <p>Hello!</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!--//blog-comments-section-->
             </c:if>
             <c:if test="${empty blog.bno}">
                 <h3>존재하지 않는 게시글입니다.</h3>
@@ -185,9 +162,9 @@
 
         preBtn.addEventListener("click", function (e) {
             e.preventDefault()
-            const preBno = e.target.getAttribute("href")
+            const preBno = e.target.dataset.bno
             const operation = e.target.dataset.oper
-            if (e.target.getAttribute("href") === "") {
+            if (preBno === "") {
                 checkToast(operation)
             } else {
                 pageForm.querySelector("input[name='bno']").value = preBno
@@ -202,9 +179,9 @@
 
         nextBtn.addEventListener("click", function (e) {
             e.preventDefault()
-            const nextBno = e.target.getAttribute("href")
+            const nextBno = e.target.dataset.bno
             const operation = e.target.dataset.oper
-            if (e.target.getAttribute("href") === "") {
+            if (nextBno === "") {
                 checkToast(operation)
             } else {
                 pageForm.querySelector("input[name='bno']").value = nextBno
@@ -228,8 +205,77 @@
             toast.show()
         }
 
+        const commentList = document.querySelector(".comment-list")
 
+        // function showList(page) {
+        //     replyService.getList(
+        //         {bno: bno, page: 1},
+        //         function (list) {
+        //             for (let i = 0, len = list.length || 0; i < len; i++) {
+        //                 console.log(list[i])
+        //             }
+        //         }
+        //     )
+        // }
+
+        //for replyService add test
+        // replyService.add(
+        //     {reply:"댓글 입력 테스트", replier:"Noc", bno:bno},
+        //     function (result) {
+        //         console.log("RESULT: " + result)
+        //     }
+        // )
+
+        //for replyService getList test
+        // replyService.getList(
+        //     {bno: bno, page: 1},
+        //     function (list) {
+        //         for (let i = 0, len = list.length || 0; i < len; i++) {
+        //             console.log(list[i])
+        //         }
+        //     }
+        // )
+
+        //for replyService update test
+        // replyService.update(
+        //     {
+        //         bno: bno,
+        //         rno: 16,
+        //         reply: "댓글 수정..."
+        //     },
+        //     function (result) {
+        //         if (result === "success") {
+        //             toastBody.textContent = "댓글이 수정되었습니다."
+        //             const toast = new bootstrap.Toast(resultToast)
+        //             toast.show()
+        //         }
+        //     },
+        //     function (result) {
+        //         //console.log("ERROR: " + result)
+        //         toastBody.textContent = "댓글 수정이 실패했습니다. Error: " + result
+        //         const toast = new bootstrap.Toast(resultToast)
+        //         toast.show()
+        //     }
+        // )
+
+        //for replyService getList test
+        // replyService.remove(
+        //     {rno:10},
+        //     function (result) {
+        //         if(result === "success") {
+        //             toastBody.textContent = "댓글이 삭제되었습니다."
+        //             const toast = new bootstrap.Toast(resultToast)
+        //             toast.show()
+        //         }
+        //     },
+        //     function (result) {
+        //         toastBody.textContent = "댓글 삭제가 실패했습니다. Error: " + result
+        //         const toast = new bootstrap.Toast(resultToast)
+        //         toast.show()
+        //     }
+        // )
     })
 </script>
+<script type="text/javascript" src="../resources/assets/js/reply.js"/>
 <%@include file="includes/footer.jsp" %>
 

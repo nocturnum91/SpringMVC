@@ -492,6 +492,6 @@
         })
     })
 </script>
-<script type="text/javascript" src="../resources/assets/js/reply.js"/>
+<script type="text/javascript" src="../resources/js/reply.js"/>
 <%@include file="includes/footer.jsp" %>
 

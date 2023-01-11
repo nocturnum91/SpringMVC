@@ -15,7 +15,7 @@
     <script defer src="../resources/assets/fontawesome/js/all.min.js"></script>
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../resources/assets/css/app.css">
+    <link rel="stylesheet" href="../resources/css/app.css">
     <link rel="stylesheet" href="../resources/assets/css/bootstrap.min.css">
     <%--  <link id="theme-style" rel="stylesheet" href="../resources/assets/css/theme-1.css">--%>
 </head>

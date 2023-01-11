@@ -57,7 +57,7 @@
                             <div class="meta mb-1">
                                 <span class="date"><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
                                                                    value="${blog.regDate}"/></span>
-                                <span class="comment"><a class="text-link" href="#">8 comments</a></span>
+                                <span class="comment"><a class="text-link" href="#">${blog.replyCount} comments</a></span>
                             </div>
                             <div class="intro"><c:out value="${blog.content}"/></div>
                             <a class="text-link post-link" href="<c:out value='${blog.bno}'/>">Read more &rarr;</a>

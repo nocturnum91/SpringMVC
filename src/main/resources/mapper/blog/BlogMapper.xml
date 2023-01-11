@@ -22,9 +22,10 @@
     </insert>
 
     <select id="read" resultType="BlogVO">
-        select bno, title, content, regdate, updatedate
-        from tb_blog
-        where bno = #{bno}
+        select blog.bno, title, content, regdate, updatedate, replycount
+        from tb_blog blog
+        left join (select count(rno) replycount, bno from tb_reply group by bno) reply on reply.bno = blog.bno
+        where blog.bno = #{bno}
     </select>
 
     <select id="getList" resultType="BlogVO">
@@ -35,7 +36,7 @@
 
     <!-- limit: 조회 개수, offset: 조회 시작 위치값  -->
     <select id="getListWithPaging" resultType="BlogVO">
-        select tmp.bno, title, content, regdate, updatedate
+        select tmp.bno, title, content, regdate, updatedate, replycount
         from tb_blog as b
         join (select bno
         from tb_blog
@@ -44,6 +45,7 @@
         order by bno desc limit #{cri.amount}
         offset #{cri.skipCount}) as tmp
         on tmp.bno = b.bno
+        left join (select count(rno) replycount, bno from tb_reply group by bno) reply on reply.bno = tmp.bno
     </select>
 
     <update id="update">

@@ -25,7 +25,7 @@
                     </div>
                     <div class="meta mb-3">
                         <span class="date"><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${blog.regDate}"/></span>
-                        <span class="comment"><a class="text-link" href="#">4 comments</a></span>
+                        <span class="comment"><a class="text-link" href="#">${blog.replyCount} comments</a></span>
 
                     </div>
                 </header>
@@ -80,7 +80,6 @@
                         </ul>
                     </div>
                     <div class="comment-pagination d-flex justify-content-center">
-
                     </div>
                     <div id="deleteReplyModal" class="modal fade">
                         <div class="modal-dialog" role="document">
@@ -105,7 +104,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!--//blog-comments-section-->
             </c:if>
             <c:if test="${empty blog.bno}">
@@ -266,20 +264,20 @@
 
         //댓글 가져오기
         function showList(page) {
-            console.log("Show list: " + page)
+            //console.log("Show list: " + page)
             replyService.getList(
                 {
                     bno: bno,
                     page: page || 1
                 },
                 function (result) {
-                    console.log(result)
+                    //console.log(result)
                     const replyCnt = result.replyCnt
                     const list = result.list
                     let str = ""
 
                     if (page == -1) {
-                        console.log("PAGE -1")
+                        //console.log("PAGE -1")
                         pageNum = Math.ceil(replyCnt / 10.0)
                         showList(pageNum)
                         return
@@ -331,10 +329,6 @@
             //댓글 수정 아이콘 클릭
             if (e.target.dataset.oper === "change") {
                 e.preventDefault()
-                console.log(e)
-                console.log(e.target.closest(".comment").children[1])
-                console.log(e.target.closest(".comment").children[2])
-
                 e.target.closest(".comment").children[1].classList.add("d-none")
                 e.target.closest(".comment").children[2].classList.remove("d-none")
 
@@ -370,7 +364,6 @@
                 replyModal.show()
                 //댓글 삭제 submit
             } else if (e.target.dataset.oper === "remove") {
-                console.log("REMOVE")
                 const rno = e.target.dataset.rno
                 replyService.remove(
                     {rno: rno},
@@ -454,10 +447,6 @@
         const commentPagination = document.querySelector(".comment-pagination")
 
         function showCommentPage(replyCnt) {
-            console.log("showCommentPage...")
-            console.log(replyCnt)
-
-
             let endNum = Math.ceil(pageNum / 10.0) * 10
             const startNum = endNum - 9
             const lastNum = Math.ceil(replyCnt / 10.0)

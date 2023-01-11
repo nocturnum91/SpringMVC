@@ -13,4 +13,6 @@ public class BlogVO {
     private Date regDate;
     private Date updateDate;
 
+    private int replyCount;
+
 }

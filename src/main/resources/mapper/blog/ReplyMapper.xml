@@ -18,11 +18,24 @@
         where rno = #{rno}
     </select>
 
+    <!--    <select id="getListWithPaging" resultType="ReplyVO">-->
+    <!--        select rno, bno, reply, replier, replyDate, updateDate-->
+    <!--        from tb_reply-->
+    <!--        where bno = #{bno}-->
+    <!--        order by rno asc-->
+    <!--    </select>-->
+
     <select id="getListWithPaging" resultType="ReplyVO">
-        select rno, bno, reply, replier, replyDate, updateDate
-        from tb_reply
-        where bno = #{bno}
-        order by rno asc
+        select tmp.rno, bno, reply, replier, replyDate, updateDate
+        from tb_reply as b
+                 join (select rno
+                       from tb_reply
+                       where 1 = 1
+                         and bno = #{bno}
+                       order by rno
+                           limit #{cri.amount}
+                       offset #{cri.skipCount}) as tmp
+                      on tmp.rno = b.rno
     </select>
 
     <update id="update">
@@ -37,5 +50,11 @@
         from tb_reply
         where rno = #{rno}
     </delete>
+
+    <select id="getCountByBno" resultType="int">
+        select count(rno)
+        from tb_reply
+        where bno = #{bno}
+    </select>
 
 </mapper>

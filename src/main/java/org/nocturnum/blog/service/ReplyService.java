@@ -1,6 +1,7 @@
 package org.nocturnum.blog.service;
 
 import org.nocturnum.blog.domain.Criteria;
+import org.nocturnum.blog.domain.ReplyPageDTO;
 import org.nocturnum.blog.domain.ReplyVO;
 
 import java.util.List;
@@ -11,11 +12,13 @@ public interface ReplyService {
 
     ReplyVO get(Long rno);
 
-    List<ReplyVO> getList(Criteria cri, Long bno);
+    List<ReplyVO> getListWithPaging(Criteria cri, Long bno);
 
     int modify(ReplyVO reply);
 
     int remove(Long rno);
+
+    ReplyPageDTO getListPage(Criteria cri, Long bno);
 
 //    Long checkBno();
 //

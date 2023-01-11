@@ -69,7 +69,7 @@
             <div class="d-flex justify-content-center">
                 <ul class="pagination">
                     <c:if test="${pageMaker.prev}">
-                        <li class="page-item disabled">
+                        <li class="page-item">
                             <a class="page-link" href="${pageMaker.startPage -1}">«</a>
                         </li>
                     </c:if>

@@ -52,7 +52,7 @@ public class ReplyMapperTests {
     @Test
     public void testList() {
         Criteria cri = new Criteria();
-        List<ReplyVO> replyVOList = replyMapper.getListWithPaging(cri, bnoArr[0]);
+        List<ReplyVO> replyVOList = replyMapper.getListWithPaging(cri, 2424817L);
 
         replyVOList.forEach(log::info);
     }

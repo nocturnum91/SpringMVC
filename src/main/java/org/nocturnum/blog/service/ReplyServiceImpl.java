@@ -3,6 +3,7 @@ package org.nocturnum.blog.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.nocturnum.blog.domain.Criteria;
+import org.nocturnum.blog.domain.ReplyPageDTO;
 import org.nocturnum.blog.domain.ReplyVO;
 import org.nocturnum.blog.mapper.ReplyMapper;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<ReplyVO> getList(Criteria cri, Long bno) {
+    public List<ReplyVO> getListWithPaging(Criteria cri, Long bno) {
         log.info("GET REPLY LIST..." + cri);
         return replyMapper.getListWithPaging(cri, bno);
     }
@@ -44,6 +45,11 @@ public class ReplyServiceImpl implements ReplyService {
     public int remove(Long rno) {
         log.info("REMOVE..." + rno);
         return replyMapper.delete(rno);
+    }
+
+    @Override
+    public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+        return new ReplyPageDTO(replyMapper.getCountByBno(bno), replyMapper.getListWithPaging(cri, bno));
     }
 
 //    @Override

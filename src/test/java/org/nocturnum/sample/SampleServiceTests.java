@@ -22,4 +22,23 @@ public class SampleServiceTests {
         log.info(sampleService.getTime());
     }
 
+    @Test
+    public void testClass() {
+        log.info(sampleService);
+        log.info(sampleService.getClass().getName());
+        // INFO - [SpringMVC.SampleServiceTests.testClass(27)] | org.nocturnum.sample.service.SampleServiceImpl@20a8a64e
+        // INFO - [SpringMVC.SampleServiceTests.testClass(28)] | com.sun.proxy.$Proxy31
+    }
+
+    @Test
+    public void testAdd() throws Exception {
+        log.info(sampleService.doAdd("123", "456"));
+    }
+
+    @Test
+    public void testAddError() throws Exception {
+        log.info(sampleService.doAdd("123", "ABC"));
+    }
+
+
 }

@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -136,21 +135,6 @@ public class SampleController {
         headers.add("Content-type", "application/json;charset=UTF-8");
 
         return new ResponseEntity<>(rtnMsg, headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/uploadFile", method = {RequestMethod.GET})
-    public void uploadFile(){
-        log.info("#################### UPLOAD FILE PAGE");
-    }
-
-    @RequestMapping(value = "/uploadFilePost", method = {RequestMethod.POST})
-    public void uploadFilePost(ArrayList<MultipartFile> files){
-        log.info("#################### UPLOAD FILE POST");
-        files.forEach(file -> {
-            log.info("================================");
-            log.info("name: " + file.getOriginalFilename());
-            log.info("size: " + file.getSize());
-        });
     }
 
 }

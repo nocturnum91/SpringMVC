@@ -6,21 +6,9 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/sample/uploadFilePost" method="post" enctype="multipart/form-data">
+<form action="uploadFilePost" method="post" enctype="multipart/form-data">
     <div>
-        <input type="file" name="files">
-    </div>
-    <div>
-        <input type="file" name="files">
-    </div>
-    <div>
-        <input type="file" name="files">
-    </div>
-    <div>
-        <input type="file" name="files">
-    </div>
-    <div>
-        <input type="file" name="files">
+        <input type="file" name="uploadFile" multiple="">
     </div>
     <div>
         <input type="submit">

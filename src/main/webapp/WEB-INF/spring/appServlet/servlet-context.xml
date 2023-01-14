@@ -25,14 +25,13 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-
-        <property name="defaultEncoding" value="utf-8"/>
-        <!-- 1024 * 1024 * 10 bytes  10MB -->
-        <property name="maxUploadSize" value="104857560"/>
-        <!-- 1024 * 1024 * 2 bytes  2MB -->
-        <property name="maxUploadSizePerFile" value="2097152"/>
-        <property name="uploadTempDir" value="file:/Users/nocturnum/Dev/upload/tmp"/>
-        <property name="maxInMemorySize" value="10485756"/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+<!--        <property name="defaultEncoding" value="utf-8"/>-->
+<!--        &lt;!&ndash; 1024 * 1024 * 10 bytes  10MB &ndash;&gt;-->
+<!--        <property name="maxUploadSize" value="104857560"/>-->
+<!--        &lt;!&ndash; 1024 * 1024 * 2 bytes  2MB &ndash;&gt;-->
+<!--        <property name="maxUploadSizePerFile" value="2097152"/>-->
+<!--        <property name="uploadTempDir" value="file:/Users/nocturnum/Dev/upload/tmp"/>-->
+<!--        <property name="maxInMemorySize" value="10485756"/>-->
     </bean>
 </beans>

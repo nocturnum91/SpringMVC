@@ -3,11 +3,13 @@ package org.nocturnum.sample.controller;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.nocturnum.sample.domain.AttachFileDTO;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,11 +88,13 @@ public class UploadController {
             String fileName = multipartFile.getOriginalFilename();
             String uploadFileName = fileName.substring(0, fileName.lastIndexOf("."));
             String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+            attachFileDTO.setFileName(uploadFileName);
+            attachFileDTO.setExtension(extension);
 
             // IE has file path
             uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/") + 1);
             log.info("only file name: " + uploadFileName + "." + extension);
-            attachFileDTO.setFileName(uploadFileName + "." + extension);
+
 
             UUID uuid = UUID.randomUUID();
             uploadFileName = uploadFileName + "_" + uuid + "." + extension;
@@ -112,6 +118,30 @@ public class UploadController {
             }
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    //http://localhost:8080/SpringMVC/sample/display?fileName=2023/01/15/%EC%97%AC%EC%9A%B0_add21868-e503-4c9d-a8cd-e433c5e8e5ca.jpg
+    @GetMapping("/display")
+    @ResponseBody
+    public ResponseEntity<byte[]> getFile(String fileName) {
+        log.info("fileName: " + fileName);
+
+        String path = "/Users/nocturnum/Dev/upload/tmp/";
+        File file = new File(path + fileName);
+        log.info("file: " + file);
+
+        ResponseEntity<byte[]> result = null;
+
+        try {
+            HttpHeaders header = new HttpHeaders();
+            header.add("Content-Type", MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file));
+
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private String getFolder() {

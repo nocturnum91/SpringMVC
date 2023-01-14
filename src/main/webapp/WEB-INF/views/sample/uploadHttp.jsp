@@ -4,6 +4,28 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Title</title>
+    <style>
+        .uploadResult {
+            width: 100%;
+            background-color: #55595c;
+        }
+
+        .uploadResult ul {
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .uploadResult ul li {
+            list-style: none;
+            padding: 10px;
+        }
+
+        .uploadResult ul li svg {
+            width: 20px;
+        }
+    </style>
 </head>
 <body>
 <h1>UPLOAD WITH HTTPREQUEST</h1>
@@ -77,12 +99,14 @@
     function showUploadedFile(uploadFileArr) {
         let str = "";
         uploadFileArr.forEach(function (obj) {
-
-            console.log(obj)
-            str += "<li>" + obj.fileName + "</li>"
+            if (!obj.image) {
+                str += "<li><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-paperclip' viewBox='0 0 16 16'><path d='M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z'/></svg>" + obj.fileName + "</li>"
+            } else {
+                const fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.fileName + "_" + obj.uuid + "." + obj.extension)
+                str += "<li><img src='display?fileName=" + fileCallPath + "'</li>"
+            }
         })
-
-        uploadResult.insertAdjacentHTML("beforeend",str)
+        uploadResult.insertAdjacentHTML("beforeend", str)
     }
 
 

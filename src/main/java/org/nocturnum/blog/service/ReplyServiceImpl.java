@@ -5,8 +5,10 @@ import lombok.extern.log4j.Log4j;
 import org.nocturnum.blog.domain.Criteria;
 import org.nocturnum.blog.domain.ReplyPageDTO;
 import org.nocturnum.blog.domain.ReplyVO;
+import org.nocturnum.blog.mapper.BlogMapper;
 import org.nocturnum.blog.mapper.ReplyMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,9 +19,13 @@ public class ReplyServiceImpl implements ReplyService {
 
     private ReplyMapper replyMapper;
 
+    private BlogMapper blogMapper;
+
+    @Transactional
     @Override
     public int register(ReplyVO reply) {
         log.info("REGISTER..." + reply);
+        blogMapper.updateReplyCnt(reply.getBno(), 1);
         return replyMapper.insert(reply);
     }
 
@@ -41,9 +47,12 @@ public class ReplyServiceImpl implements ReplyService {
         return replyMapper.update(reply);
     }
 
+    @Transactional
     @Override
     public int remove(Long rno) {
         log.info("REMOVE..." + rno);
+        ReplyVO reply = replyMapper.read(rno);
+        blogMapper.updateReplyCnt(reply.getBno(), -1);
         return replyMapper.delete(rno);
     }
 

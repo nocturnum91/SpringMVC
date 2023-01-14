@@ -30,4 +30,6 @@ public interface BlogMapper {
 
     int getTotalCount(Criteria cri);
 
+    void updateReplyCnt(@Param("bno") Long bno, @Param("amount") int amount);
+
 }

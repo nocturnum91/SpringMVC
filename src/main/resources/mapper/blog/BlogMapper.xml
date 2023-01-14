@@ -22,10 +22,9 @@
     </insert>
 
     <select id="read" resultType="BlogVO">
-        select blog.bno, title, content, regdate, updatedate, replycount
-        from tb_blog blog
-        left join (select count(rno) replycount, bno from tb_reply group by bno) reply on reply.bno = blog.bno
-        where blog.bno = #{bno}
+        select bno, title, content, regdate, updatedate, replycount
+        from tb_blog
+        where bno = #{bno}
     </select>
 
     <select id="getList" resultType="BlogVO">
@@ -45,7 +44,6 @@
         order by bno desc limit #{cri.amount}
         offset #{cri.skipCount}) as tmp
         on tmp.bno = b.bno
-        left join (select count(rno) replycount, bno from tb_reply group by bno) reply on reply.bno = tmp.bno
     </select>
 
     <update id="update">
@@ -88,5 +86,11 @@
         from tb_blog
         where bno > 0
     </select>
+
+    <update id="updateReplyCnt">
+        update tb_blog
+        set replyCount = replyCount + #{amount}
+        where bno = #{bno}
+    </update>
 
 </mapper>

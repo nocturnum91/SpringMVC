@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -32,6 +32,8 @@ import java.util.UUID;
 @RequestMapping("/sample/*")
 @Log4j
 public class FileController {
+
+    String path = "/Users/nocturnum/Dev/upload/tmp/";
 
     @GetMapping(value = "/uploadFile")
     public void uploadFile() {
@@ -69,7 +71,6 @@ public class FileController {
         log.info("#################### UPLOAD FILE HTTPREQUEST: " + uploadFile.length);
 
         List<AttachFileDTO> list = new ArrayList<>();
-        String path = "/Users/nocturnum/Dev/upload/tmp";
 
         // make folder
         File uploadPath = new File(path, getFolder());
@@ -127,7 +128,6 @@ public class FileController {
     public ResponseEntity<byte[]> getFile(String fileName) {
         log.info("#################### GET FILE: " + fileName);
 
-        String path = "/Users/nocturnum/Dev/upload/tmp/";
         File file = new File(path + fileName);
         log.debug("file: " + file);
 
@@ -150,7 +150,6 @@ public class FileController {
     public ResponseEntity<Resource> downloadFile(String fileName, @RequestHeader("User-Agent") String userAgent) {
         log.info("#################### DOWNLOAD FILE: " + fileName);
         ResponseEntity<Resource> result = null;
-        String path = "/Users/nocturnum/Dev/upload/tmp/";
 
         Resource resource = new FileSystemResource(path + fileName);
         log.debug("resource: " + resource);
@@ -185,6 +184,30 @@ public class FileController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @PostMapping("/deleteFile")
+    @ResponseBody
+    public ResponseEntity<String> deleteFile(String fileName, String type) {
+        log.info("#################### DELETE FILE: " + fileName + " / " + type);
+        File file;
+
+        try {
+            file = new File(path + URLDecoder.decode(fileName, "UTF-8"));
+            file.delete();
+
+            if (type.equals("image")) {
+                String largeFileName = file.getAbsolutePath().replace("s_", "");
+                log.info("largeFileName: " + largeFileName);
+
+                file = new File(largeFileName);
+                file.delete();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
     }
 
     private String getFolder() {

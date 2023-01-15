@@ -3,6 +3,8 @@ package org.nocturnum.sample.controller;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.nocturnum.sample.domain.AttachFileDTO;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,17 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +31,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/sample/*")
 @Log4j
-public class UploadController {
+public class FileController {
 
     @GetMapping(value = "/uploadFile")
     public void uploadFile() {
@@ -38,14 +39,14 @@ public class UploadController {
     }
 
     @PostMapping(value = "/uploadFilePost")
-    public void uploadFilePost(MultipartFile[] uploadFile, Model model) {
+    public void uploadFilePost(MultipartFile[] uploadFile) {
         log.info("#################### UPLOAD FILE POST: " + uploadFile.length);
 
         String uploadPath = "/Users/nocturnum/Dev/upload/tmp";
 
         for (MultipartFile multipartFile : uploadFile) {
-            log.info(multipartFile.getOriginalFilename());
-            log.info(multipartFile.getSize());
+            log.debug(multipartFile.getOriginalFilename());
+            log.debug(multipartFile.getSize());
 
             File saveFile = new File(uploadPath, multipartFile.getOriginalFilename());
 
@@ -72,15 +73,15 @@ public class UploadController {
 
         // make folder
         File uploadPath = new File(path, getFolder());
-        log.info("upload path: " + uploadPath);
+        log.debug("upload path: " + uploadPath);
 
-        if (uploadPath.exists() == false) {
+        if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
 
         for (MultipartFile multipartFile : uploadFile) {
-            log.info("UPLOAD FILE NAME: " + multipartFile.getOriginalFilename());
-            log.info("UPLOAD FILE SIZE: " + multipartFile.getSize());
+            log.debug("UPLOAD FILE NAME: " + multipartFile.getOriginalFilename());
+            log.debug("UPLOAD FILE SIZE: " + multipartFile.getSize());
 
             AttachFileDTO attachFileDTO = new AttachFileDTO();
             attachFileDTO.setUploadPath(getFolder());
@@ -124,11 +125,11 @@ public class UploadController {
     @GetMapping("/display")
     @ResponseBody
     public ResponseEntity<byte[]> getFile(String fileName) {
-        log.info("fileName: " + fileName);
+        log.info("#################### GET FILE: " + fileName);
 
         String path = "/Users/nocturnum/Dev/upload/tmp/";
         File file = new File(path + fileName);
-        log.info("file: " + file);
+        log.debug("file: " + file);
 
         ResponseEntity<byte[]> result = null;
 
@@ -138,7 +139,49 @@ public class UploadController {
 
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(String fileName, @RequestHeader("User-Agent") String userAgent) {
+        log.info("#################### DOWNLOAD FILE: " + fileName);
+        ResponseEntity<Resource> result = null;
+        String path = "/Users/nocturnum/Dev/upload/tmp/";
+
+        Resource resource = new FileSystemResource(path + fileName);
+        log.debug("resource: " + resource);
+        if (!resource.exists()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String resourceName = resource.getFilename();
+        String extension = resourceName.substring(resourceName.lastIndexOf(".") + 1);
+
+        //remove UUID
+        String resourceOriginalName = resourceName.substring(0, resourceName.indexOf(".")).substring(0, resourceName.lastIndexOf("_")) + "." + extension;
+
+        try {
+            HttpHeaders header = new HttpHeaders();
+
+            String downloadName = null;
+            log.debug(userAgent);
+
+            if (userAgent.contains("Trident")) {
+                log.debug("IE browser");
+                downloadName = URLEncoder.encode(resourceOriginalName, "UTF-8").replaceAll("\\+", " ");
+            } else if (userAgent.contains("Edge") || userAgent.contains("Edg")) {
+                log.debug("Edge browser");
+                downloadName = URLEncoder.encode(resourceOriginalName, "UTF-8");
+            } else {
+                log.debug("Chrome browser");
+                downloadName = new String(resourceOriginalName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+            }
+            header.add("Content-Disposition", "attachment; filename=" + downloadName);
+            result = new ResponseEntity<>(resource, header, HttpStatus.OK);
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return result;

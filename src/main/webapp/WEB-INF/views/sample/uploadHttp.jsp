@@ -25,6 +25,28 @@
         .uploadResult ul li svg {
             width: 20px;
         }
+
+        .bigPictureWrapper {
+            position: absolute;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            top: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .bigPicture {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bigPicture img {
+            width: 600px;
+        }
     </style>
 </head>
 <body>
@@ -37,6 +59,9 @@
 </div>
 <div class="uploadResult">
     <ul></ul>
+</div>
+<div class="bigPictureWrapper">
+    <div class="bigPicture"></div>
 </div>
 <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>--%>
 <script type="text/javascript">
@@ -84,11 +109,11 @@
     const maxSize = 5242880; //5MB
     function checkExtension(fileName, fileSize) {
         if (fileSize >= maxSize) {
-            alert("파일 사이즈 초과");
+            alert("파일 사이즈 초과")
             return false;
         }
         if (regex.test(fileName)) {
-            alert("해당 종류의 파일은 업로드할 수 없습니다.");
+            alert("해당 종류의 파일은 업로드할 수 없습니다.")
             return false;
         }
         return true;
@@ -97,17 +122,41 @@
     const uploadResult = document.querySelector(".uploadResult ul")
 
     function showUploadedFile(uploadFileArr) {
-        let str = "";
+        let str = ""
         uploadFileArr.forEach(function (obj) {
             if (!obj.image) {
-                str += "<li><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-paperclip' viewBox='0 0 16 16'><path d='M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z'/></svg>" + obj.fileName + "</li>"
+                const fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.fileName + "_" + obj.uuid + "." + obj.extension)
+                str += "<li><a href='download?fileName=" + fileCallPath + "'>"
+                    + "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-paperclip' viewBox='0 0 16 16'><path d='M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z'/></svg>"
+                    + obj.fileName + "</li>"
             } else {
                 const fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.fileName + "_" + obj.uuid + "." + obj.extension)
-                str += "<li><img src='display?fileName=" + fileCallPath + "'</li>"
+                const originPath = obj.uploadPath + "/" + obj.fileName + "_" + obj.uuid + "." + obj.extension
+                str += "<li><a href=\"javascript:showImage(\'" + originPath + "\')\"><img src='display?fileName=" + fileCallPath + "'</a></li>"
             }
         })
         uploadResult.insertAdjacentHTML("beforeend", str)
     }
+
+    const bigPictureWrapper = document.querySelector(".bigPictureWrapper")
+    const bigPicture = document.querySelector(".bigPicture")
+
+    function showImage(fileCallPath) {
+        console.log(fileCallPath)
+
+        bigPictureWrapper.style.display = "flex"
+
+        const str = "<img src='display?fileName=" + encodeURI(fileCallPath) + "'>"
+        bigPicture.insertAdjacentHTML("beforeend", str)
+        bigPicture.animate({width: '100%', height: '100%'}, 1000)
+    }
+
+    bigPictureWrapper.addEventListener("click", function () {
+        bigPicture.animate({width: '0%', height: '0%'}, 1000)
+        setTimeout(() => {
+            bigPictureWrapper.style.display = "none"
+        }, 1000)
+    })
 
 
 </script>

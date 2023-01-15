@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
-import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
@@ -17,10 +16,9 @@ public class UtilTests {
 
     @Test
     public void subStringTest() {
-        String uploadFileName = "twitter_FmR97A1aMAIr9fD.jpg";
-//            String extension =
+        String uploadFileName = "여우_81d694da-1faf-4572-ba80-82a4c198cace";
         log.info(uploadFileName.substring(0, uploadFileName.lastIndexOf(".")));
-        log.info(uploadFileName.substring(uploadFileName.lastIndexOf(".")+1));
+        log.info(uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1));
     }
 
     @Test
@@ -31,6 +29,13 @@ public class UtilTests {
         MimetypesFileTypeMap mimeTypeMap = new MimetypesFileTypeMap();
         String contentType = mimeTypeMap.getContentType(file);
         log.info(contentType.startsWith("image"));
+    }
+
+    @Test
+    public void getOriginalName() {
+        String fileName = "(작성예시)_지역보험료·소득월액보험료_소득_정산부과_동의서_5ecd10ca-4b8b-4362-9e9c-ae0b735a23e8.docx";
+        String resourceOriginalName = fileName.substring(0, fileName.indexOf(".")).substring(0, fileName.lastIndexOf("_"));
+        log.info(resourceOriginalName);
 
     }
 
